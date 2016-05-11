@@ -28,7 +28,7 @@ doorLockPW=[0,0,0,0]
 
 
 def allGPIOSet():
-
+	print "all GPIO set"
 	global rows
 	global cols
 	global trig
@@ -64,7 +64,9 @@ def cameraCapture():
 	with picamera.PiCamera() as camera:
 		camera.capture('./image.jpg')
 
+#TODO: not use
 def doorCheck():
+	print "door check"
 	startTime=time.localtime().tm_min
 	while True:
 		if not areYouMaster and endNumbering:
@@ -74,15 +76,17 @@ def doorCheck():
 		else:
 			if time.localtime().tm_min-startTime>=1:
 				break
-			
+
+def doorOpen():
+	print "door open"
+	pass
 
 def distanceCheck():
 	global trig
 	global echo
-	print "start"
+	print "distance Check"
 
 	try:
-#	while True:
 		gpio.output(trig,False)
 		time.sleep(0.5)
 		gpio.output(trig,True)
@@ -97,20 +101,15 @@ def distanceCheck():
 		distance=round(distance,2)
 		print "distance : ",distance,"cm"
 		return distance
-#				subject=raw_input('subject:')
-#				sender=raw_input('from:')
-#				receiver=raw_input('receiver:')
-#				text=raw_input('text:')
-#				fileName=raw_input("filename:")
-#				gmailID=raw_input('gmailID:')
-#				gmailPW=raw_input('gmailPW')
-#				emailSend(subject,sender,receiver,text,gmailID,gmailPW)
 	except:
 		print "distanceCheck error"
 		gpio.cleanup()
 		exit()
 
 def emailSend(subject='',sender='',recevier='',text='',filename='',gmailID='',gmailPW=''):
+
+# e.g)   emailSend('test mail','123@gmail.com','123@naver.com','content text','image.jpg','123@gmail.com','pw123123')
+	print "email Send"
 	msg=MIMEMultipart()
 	msg['Subject']=subject
 	msg['From']=sender
@@ -136,6 +135,7 @@ def emailSend(subject='',sender='',recevier='',text='',filename='',gmailID='',gm
 
 
 def doorLockInput():
+#print "doorLock Input"
 	global rows
 	global cols
 
@@ -192,7 +192,8 @@ def main():
 							data=doorLockInput()
 							if data=='*':
 								if inputs==doorLockPW:
-									print "pass"
+									doorOpen()
+									print "pass door open"
 								else:
 									cameraOpen()
 									cameraCapture()
