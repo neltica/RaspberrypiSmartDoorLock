@@ -13,15 +13,17 @@ import time
 import picamera
 import threading
 
-
 #pin setting
 rows=(12,16,20,21)
 cols=(25,8,7)
+
 trig=23
 echo=24
-doorCheckPinIn=19
-doorCheckPinOut=26
 
+handleCheckPinIn=19
+handleCheckPinOut=26
+
+doorOnOff=13
 
 #pw setting
 doorLockPW=[0,0,0,0]
@@ -47,10 +49,11 @@ def allGPIOSet():
 		gpio.setup(col,gpio.OUT)
 		gpio.output(col,True)
 
-	gpio.setup(doorCheckPinIn,gpio.IN,pull_up_down=gpio.PUD_DOWN)
-	gpio.setup(doorCheckPinOut,gpio.OUT)
-	gpio.output(doorCheckPinOut,True)
+	gpio.setup(handleCheckPinIn,gpio.IN,pull_up_down=gpio.PUD_DOWN)
+	gpio.setup(handleCheckPinOut,gpio.OUT)
+	gpio.output(handleCheckPinOut,True)
 
+	gpio.setup(doorOnOff,gpio.OUT)
 
 
 def cameraOpen():
@@ -79,6 +82,9 @@ def doorCheck():
 
 def doorOpen():
 	print "door open"
+	gpio.output(doorOnOff,True)
+	time.sleep(0.1)
+	gpio.output(doorOnOff,False)
 	pass
 
 def distanceCheck():
@@ -166,38 +172,48 @@ def doorLockInput():
 
 
 def handleCheck():
-	return gpio.input(doorCheckPinIn)
-
+	return gpio.input(handleCheckPinIn)
 
 def main():
+
+
+	id=raw_input("Your Gmail ID:")
+	pw=raw_input("Your Gmail PW:")
+	recvID=raw_input('Recv Email ID:')
+
 	try:
 		inputs=[]
 		allGPIOSet()
 		while True:
 			if distanceCheck()<20:
+				cameraOpen()
+				startTime=time.localtime().tm_min
 				while True:
+					if time.localtime().tm_min-startTime>=1:
+						cameraClose()						   
+						break
 					if handleCheck():
-						cameraOpen()
 						cameraCapture()
 						cameraClose()
+						emailSend('test mail title',id,recvID,'content text','image.jpg',id,pw)
 					data=doorLockInput()
 					breakCheck=False
 					time.sleep(0.01)
 					if data=='*':
 						while True:
 							if handleCheck():
-								cameraOpen()
 								cameraCapture()
 								cameraClose()
+								emailSend('test mail title',id,recvID,'content text','image.jpg',id,pw)
 							data=doorLockInput()
 							if data=='*':
 								if inputs==doorLockPW:
 									doorOpen()
 									print "pass door open"
 								else:
-									cameraOpen()
 									cameraCapture()
 									cameraClose()
+									emailSend('test mail title',id,recvID,'content text','image.jpg',id,pw)
 									print "error"
 								inputs=[]
 								breakCheck=True
