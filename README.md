@@ -47,6 +47,11 @@
 ##Implementation
 >###Architecture
 ![Architecture](https://github.com/neltica/RaspberrypiSmartDoorLock/blob/master/Readme_Image/%EC%B5%9C%EC%A2%85%20%ED%9A%8C%EB%A1%9C%EB%8F%84.png)
+참고: HC-SR04가 문제가 있어 저항없이도 사용이 가능해져서 저항을 제거함.
+
+>###HC-SR04
+![HC-SR04](https://github.com/neltica/RaspberrypiSmartDoorLock/blob/master/Readme_Image/HC-SR04%20%EB%9D%BC%EC%A6%88%EB%B2%A0%EB%A6%AC%20%EC%97%B0%EA%B2%B0.png)
+
 
 ##Implementation Video
 
