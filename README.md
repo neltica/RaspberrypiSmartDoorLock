@@ -39,13 +39,18 @@
 
 ##How to Run?
 
->1. Open Terminal
->2. Move path: ./allmerge
->3. python main.py
+>1. 터미널 열기
+>2. ./allmerge 폴더로 이동
+>3. python main.py 입력후 엔터
+>4. 종료는 ctrl c 로
 
 ##Implementation
 >###Architecture
 ![Architecture](https://github.com/neltica/RaspberrypiSmartDoorLock/blob/master/Readme_Image/%EC%B5%9C%EC%A2%85%20%ED%9A%8C%EB%A1%9C%EB%8F%84.png)
+
+##Implementation Video
+
+초음파센서,카메라촬영,이메일전송 구현 영상 : https://youtu.be/V67XVBWXc-Y
 
 
 
